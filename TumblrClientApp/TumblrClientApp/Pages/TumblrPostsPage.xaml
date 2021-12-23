@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<d:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TumblrClientApp.Pages.TumblrPostsPage"
+             xmlns:d="clr-namespace:TumblrClientApp.Pages;assembly=TumblrClientApp" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters="clr-namespace:TumblrClientApp.Converters"
+             BackgroundColor="{AppThemeBinding 
+                        Dark={StaticResource WindowBackgroundColorDark}, 
+                        Light={StaticResource WindowBackgroundColor}}">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior EventName="Appearing" Command="{Binding LoadCommand }">
+        </xct:EventToCommandBehavior>
+    </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:IntEnumConverter x:Key="IntEnum"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <StackLayout>
+            <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="2">
+                <Picker ItemsSource="{Binding PostTypes}" TextColor="White" SelectedIndex="{Binding SelectedPostType, Converter={StaticResource IntEnum}}">
+                    <Picker.Behaviors>
+                        <xct:EventToCommandBehavior EventName="SelectedIndexChanged" Command="{Binding LoadCommand}" />
+                    </Picker.Behaviors>
+                </Picker>
+            </Frame>
+            <ListView
+            ItemsSource="{Binding Posts}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding Title}"></Label>
+                                <Label Text="{Binding PostUrl}"></Label>
+                                <Label Text="{Binding Body}"></Label>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+        <AbsoluteLayout BackgroundColor="#22000000" AbsoluteLayout.LayoutBounds="0.5,0.5,1,1" AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding IsBusy}">
+            <ActivityIndicator Color="Black" AbsoluteLayout.LayoutBounds="0.5,0.5,0.1,0.1" AbsoluteLayout.LayoutFlags="All" IsVisible="True" IsRunning="True"/>
+        </AbsoluteLayout>
+    </AbsoluteLayout>
+
+</d:BaseContentPage>
